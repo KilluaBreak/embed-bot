@@ -78,7 +78,10 @@ async def buat_embed(interaction: discord.Interaction):
 
 @bot.event
 async def on_ready():
-    await bot.tree.sync(guild=discord.Object(id=GUILD_ID) if GUILD_ID else None)
-    print(f"✅ Bot embed aktif sebagai {bot.user}")
+    try:
+        synced = await bot.tree.sync(guild=discord.Object(id=GUILD_ID))
+        print(f"✅ Bot siap sebagai {bot.user} — {len(synced)} command disinkron.")
+    except Exception as e:
+        print(f"❌ Gagal sync slash command: {e}")
 
 bot.run(TOKEN)
