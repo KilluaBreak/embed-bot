@@ -1,29 +1,24 @@
-import os
-import discord
+# test_slash.py
+import os, discord
 from discord.ext import commands
-from discord import app_commands
 from dotenv import load_dotenv
 
 load_dotenv()
-
-TOKEN = os.getenv("DISCORD_TOKEN")
-GUILD_ID = int(os.getenv("GUILD_ID", 0))
+TOKEN   = os.getenv("DISCORD_TOKEN")
+GUILD   = int(os.getenv("GUILD_ID", 0))
 
 intents = discord.Intents.default()
-bot = commands.Bot(command_prefix="!", intents=intents)
+bot     = commands.Bot(command_prefix="!", intents=intents)
+
+@bot.tree.command(name="ping", description="pong test")
+async def ping(inter: discord.Interaction):
+    await inter.response.send_message("pong 🏓", ephemeral=True)
 
 @bot.event
 async def on_ready():
-    guild = discord.Object(id=GUILD_ID)
-    try:
-        synced = await bot.tree.sync(guild=guild)
-        print(f"✅ Bot online sebagai {bot.user}")
-        print(f"✅ Slash command tersinkron di GUILD_ID {GUILD_ID}: {len(synced)} command")
-    except Exception as e:
-        print(f"❌ Gagal sync slash command: {e}")
-
-@bot.tree.command(name="cek", description="Cek apakah bot aktif")
-async def cek(interaction: discord.Interaction):
-    await interaction.response.send_message("✅ Bot aktif & slash command muncul!", ephemeral=True)
+    print("Registered cmds:", bot.tree.get_commands())          # <— should show 1 command
+    synced = await bot.tree.sync(guild=discord.Object(id=GUILD))
+    print("Synced len:", len(synced))
+    print("Bot ready:", bot.user)
 
 bot.run(TOKEN)
