@@ -12,9 +12,13 @@ intents = discord.Intents.default()
 bot = commands.Bot(command_prefix="!", intents=intents)
 
 # ✅ Slash command HARUS ditulis sebelum on_ready()
-@bot.tree.command(name="ping", description="Tes bot aktif")
+@bot.tree.command(
+    name="ping",
+    description="Tes bot aktif",
+    guild=discord.Object(id=GUILD_ID)
+)
 async def ping_command(interaction: discord.Interaction):
-    await interaction.response.send_message("🏓 Pong! Slash command berhasil!", ephemeral=True)
+
 
 @bot.event
 async def on_ready():
