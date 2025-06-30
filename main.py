@@ -18,6 +18,8 @@ bot = commands.Bot(command_prefix="!", intents=intents)
     guild=discord.Object(id=GUILD_ID)
 )
 async def ping_command(interaction: discord.Interaction):
+    await interaction.response.send_message("🏓 Pong dari AxenX!", ephemeral=True)
+
 
 
 @bot.event
